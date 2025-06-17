@@ -1,0 +1,52 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: gateway
+  redis:
+    host: localhost
+    port: 6379
+  cloud:
+    gateway:
+      routes:
+        - id: company_service
+          uri: lb://COMPANY-SERVICE
+          predicates:
+            - Path=/companies/**
+          filters:
+              - name: RequestRateLimiter
+                args:
+                  redis-rate-limiter.replenishRate: 5
+                  redis-rate-limiter.burstCapacity: 10
+        - id: job_service
+          uri: lb://JOB-SERVICE
+          predicates:
+            - Path=/jobs/**
+        - id: review_service
+          uri: lb://REVIEW-SERVICE
+          predicates:
+            - Path=/reviews/**
+        - id: eureka_server
+          uri: http://localhost:8761/
+          predicates:
+            - Path=/eureka/main
+          filters:
+            - SetPath=/
+        - id: eureka_server_static
+          uri: http://localhost:8761/
+          predicates:
+            - Path=/eureka/**
+
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  level:
+    root: info
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
+    org.springframework.cloud.gateway.filter.ratelimit: DEBUG
