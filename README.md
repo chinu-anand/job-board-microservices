@@ -11,7 +11,6 @@ A microservices-based job board application built with Spring Boot, Spring Cloud
 - [Running the Application](#running-the-application)
 - [API Endpoints](#api-endpoints)
 - [Development](#development)
-- [License](#license)
 
 ## Architecture
 
@@ -32,10 +31,10 @@ A microservices-based job board application built with Spring Boot, Spring Cloud
 | Service         | Port  | Description                |
 |-----------------|-------|----------------------------|
 | Gateway         | 8084  | API Gateway                |
-| Config Server   | 8888  | Centralized Config         |
+| Config Server    | 8888  | Centralized Config         |
 | Service Registry| 8761  | Eureka Discovery           |
 | Company Service | 8082  | Company Management         |
-| Job Service     | 8081* | Job Management             |
+| Job Service     | 8081  | Job Management             |
 | Review Service  | 8083  | Review Management          |
 | PostgreSQL      | 5432  | Database                   |
 | RabbitMQ        | 5672  | Message Broker             |
@@ -71,19 +70,13 @@ cd job-board-microservices
 - Configuration files are managed via the [Config Server](config-server/).
 - Update database credentials in `application.yml` or via config repo as needed.
 
-### Build All Services
-
-```sh
-./gradlew build
-```
-
 ### Start Infrastructure (DB, RabbitMQ, Zipkin)
 
 ```sh
 docker-compose up -d
 ```
 
-### Run All Microservices
+### Run All Microservices using Terminal
 
 In separate terminals, start each service:
 
@@ -95,6 +88,18 @@ cd companyms && ./gradlew bootRun
 cd jobms && ./gradlew bootRun
 cd reviewms && ./gradlew bootRun
 ```
+OR
+
+### Run All Microservices Using IntelliJ IDEA
+
+1. Open the project root folder in IntelliJ IDEA.
+2. In the Project view, locate each microservice module (e.g., `config-server`, `service-reg`, `gateway`, `companyms`, `jobms`, `reviewms`).
+3. For each service:
+    - Right-click the main class inside the `src/main/java` directory.
+    - Select **Run main class**.
+4. Repeat for all services so each runs in its own tab or window.
+
+> **Tip:** You can also create a [Run Configuration](https://www.jetbrains.com/help/idea/run-debug-configuration.html) for each service for easier startup in the future.
 
 ## API Endpoints
 
